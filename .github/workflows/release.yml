@@ -1,0 +1,37 @@
+name: Release
+
+# Push a tag vX.Y.Z (matching package.json) to publish com.boxofraccoons.claude-usage.streamDeckPlugin.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Tag matches package.json
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          pkg="$(node -p "require('./package.json').version")"
+          if [ "$tag" != "$pkg" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match package.json version $pkg"
+            exit 1
+          fi
+      - run: pnpm check
+      - run: pnpm build
+      - name: Pack
+        run: pnpm exec streamdeck pack com.boxofraccoons.claude-usage.sdPlugin --version "${GITHUB_REF_NAME#v}" --output dist --force --no-update-check
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" dist/*.streamDeckPlugin --title "$GITHUB_REF_NAME" --generate-notes --verify-tag

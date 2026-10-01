@@ -3,7 +3,9 @@
 	"version": "0.1.0",
 	"private": true,
 	"description": "Stream Deck plugin: Claude 5-hour and 7-day usage as gauge keys.",
+	"license": "MIT",
 	"type": "module",
+	"packageManager": "pnpm@11.15.1",
 	"scripts": {
 		"build": "rollup -c",
 		"watch": "rollup -c -w --watch.onEnd=\"streamdeck restart com.boxofraccoons.claude-usage\"",
