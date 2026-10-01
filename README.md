@@ -8,6 +8,12 @@ inner ring. Pressing a key opens the app you pick for it (Claude, a terminal, an
 Requires a Claude Pro or Max subscription, Claude Code installed and signed in,
 Stream Deck 7.1 or later, and macOS 13 or later.
 
+## Install
+
+Download `com.boxofraccoons.claude-usage.streamDeckPlugin` from the
+[latest release](https://github.com/Box-of-Raccoons/streamdeck-claude-usage/releases/latest) and
+double-click it. To update, install a newer release the same way.
+
 ## Use it
 
 1. Drag **Usage Gauge** (category "Claude Usage Gauges") onto a key.
@@ -64,3 +70,14 @@ node scripts/make-images.ts [previewDir]   # regenerate icons (and preview PNGs)
 
 A newly linked plugin only appears after the Stream Deck app restarts. Plugin logs are in
 `com.boxofraccoons.claude-usage.sdPlugin/logs/`.
+
+## Release
+
+Bump `version` in `package.json` and the manifest's `Version`, merge to `main`, then tag
+and push `vX.Y.Z`. The Release workflow checks the tag against `package.json`, runs the
+checks, packs the plugin and publishes it as a GitHub release.
+
+## License
+
+MIT
+

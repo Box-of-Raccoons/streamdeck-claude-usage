@@ -1,3 +1,7 @@
 node_modules/
 *.sdPlugin/bin
 *.sdPlugin/logs
+
+# Release packages
+dist/
+*.streamDeckPlugin
