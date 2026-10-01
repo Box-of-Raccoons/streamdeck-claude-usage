@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<title>Usage Gauge Settings</title>
+	<meta charset="utf-8" />
+	<script src="https://sdpi-components.dev/releases/v4/sdpi-components.js"></script>
+</head>
+<body>
+	<sdpi-item label="Window">
+		<sdpi-select setting="window" default="five_hour">
+			<option value="five_hour">5-hour</option>
+			<option value="seven_day">7-day</option>
+		</sdpi-select>
+	</sdpi-item>
+	<sdpi-item label="App to open">
+		<sdpi-textfield setting="app" placeholder="Claude"></sdpi-textfield>
+	</sdpi-item>
+	<sdpi-item>
+		<p style="margin:0;font-size:9pt;opacity:.7">An app name (Claude, Terminal, Ghostty) or a path to a .app. Empty opens Claude.</p>
+	</sdpi-item>
+</body>
+</html>
