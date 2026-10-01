@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { arcPath, COLORS, levelFor, renderGauge, toDataUrl } from "../src/gauge.js";
+import { arcPath, COLORS, levelFor, renderCombo, renderGauge, toDataUrl } from "../src/gauge.js";
 
 const paths = (svg: string) => [...svg.matchAll(/<path d="([^"]+)"[^>]*stroke="([^"]+)"/g)].map((m) => ({ d: m[1], stroke: m[2] }));
+const texts = (svg: string) => [...svg.matchAll(/<text[^>]*>([^<]*)<\/text>/g)].map((m) => m[1]);
 
 describe("levelFor", () => {
 	it.each([
@@ -90,4 +91,47 @@ it("toDataUrl round-trips", () => {
 	const url = toDataUrl("<svg/>");
 	expect(url.startsWith("data:image/svg+xml;base64,")).toBe(true);
 	expect(Buffer.from(url.split(",")[1], "base64").toString()).toBe("<svg/>");
+});
+
+describe("renderCombo", () => {
+	const OUTER = 60;
+	const INNER = 45;
+
+	it("puts 5h on the outer ring and 7d on the inner, each in its own band color", () => {
+		const [outerTrack, outerFill, innerTrack, innerFill] = paths(renderCombo(93, 58));
+		expect(outerTrack.d).toBe(arcPath(1, OUTER));
+		expect(outerFill).toEqual({ d: arcPath(0.93, OUTER), stroke: COLORS.red });
+		expect(innerTrack.d).toBe(arcPath(1, INNER));
+		expect(innerFill).toEqual({ d: arcPath(0.58, INNER), stroke: COLORS.green });
+	});
+
+	it("shows the 5h number big, the 7d number under it, and the ring legend", () => {
+		const svg = renderCombo(45.4, 12.6);
+		expect(texts(svg)).toEqual(["45%", "13%", "5h · 7d"]);
+		expect(svg).toMatch(/font-weight="bold" font-size="28" fill="#FFFFFF">45%</);
+	});
+
+	it("colors each ring by its own rounded value", () => {
+		const [, outerFill, , innerFill] = paths(renderCombo(59.5, 89.5));
+		expect(outerFill.stroke).toBe(COLORS.orange);
+		expect(innerFill.stroke).toBe(COLORS.red);
+	});
+
+	it("handles each window's missing data on its own", () => {
+		const onlyFive = renderCombo(30, null);
+		expect(texts(onlyFive)).toEqual(["30%", "--", "5h · 7d"]);
+		expect(paths(onlyFive).map((p) => p.d)).toEqual([arcPath(1, OUTER), arcPath(0.3, OUTER), arcPath(1, INNER)]);
+		const onlySeven = renderCombo(null, 70);
+		expect(texts(onlySeven)).toEqual(["--", "70%", "5h · 7d"]);
+		expect(paths(onlySeven).map((p) => p.d)).toEqual([arcPath(1, OUTER), arcPath(1, INNER), arcPath(0.7, INNER)]);
+	});
+
+	it("shrinks the big number for 100% and up", () => {
+		expect(renderCombo(100, 50)).toMatch(/font-size="24" fill="#FFFFFF">100%</);
+	});
+});
+
+it("arcPath scales with the radius", () => {
+	// r=60 around (72,72): 135° -> (29.57, 114.43); half sweep ends at 12 o'clock (72, 12)
+	expect(arcPath(0.5, 60)).toBe("M 29.57 114.43 A 60 60 0 0 1 72 12");
 });

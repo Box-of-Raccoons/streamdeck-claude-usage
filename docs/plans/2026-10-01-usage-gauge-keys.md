@@ -14,6 +14,11 @@ Changes from the earlier Deckhand plan (Obsidian, "Stream Deck Plus Control Deck
   on their own before combining them, and expects some to be useful on their own in the
   Marketplace. That makes the `/usage` poll the zero-setup default and the statusline tap
   an optional speed-up, and it gets its own UUID (`com.boxofraccoons.claude-usage`).
+- 2026-10-01: a "Both" window option (5h outer ring with the big number, 7d inner ring with
+  a small grey number), to fit both windows on one of the Stream Deck+'s 8 keys. Chosen over
+  two equal labelled lines, whose labels were too small to read at real key size.
+- 2026-10-01: the app setting became a picker (`sdpi-file`, accept `.app`), like the built-in
+  Open Application action, instead of free text.
 
 ## Decisions
 
@@ -26,15 +31,18 @@ Changes from the earlier Deckhand plan (Obsidian, "Stream Deck Plus Control Deck
   sessions keep re-reporting old numbers, and usage only rises inside a window.
 - **Display:** the rounded value drives both the text and the color, so "60%" is never green.
   No data shows a grey track and `--`.
-- **Click:** `open -a <app>`, per-key setting, empty means Claude. Alert on failure.
+- **Click:** `open -a <app>`, per-key app picker, none picked means Claude. Alert on failure.
+  The path is normalized (file URL, percent-encoding, trailing slash) since the picker's
+  output on macOS isn't documented.
 - **Platform:** macOS only for now (`open -a`, `qlmanage` for the icon PNGs).
 
 ## Status (2026-10-01)
 
-Built, 48 tests, all 16 mutations caught (with a no-op control that survives).
+Built, 59 tests, all 24 mutations caught (with a no-op control that survives).
 Linked into the Stream Deck app on the Mac mini; the plugin process starts.
 
 Open:
 - Look at the keys on the real device (rendering of SVG text in the Stream Deck app).
+- Confirm the picker can select a `.app` bundle on macOS (macOS treats apps as folders).
 - Marketplace naming: "Claude" in a product name may need Anthropic's trademark rules checked.
 - Windows support, if it goes to the Marketplace.

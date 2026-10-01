@@ -2,7 +2,8 @@
 
 Shows your Claude 5-hour and 7-day usage as gauge keys: a 3/4 circle on black,
 green below 60%, orange from 60%, red from 90%, with the percentage in the
-center. Pressing a key opens the app you pick for it (Claude, a terminal, anything).
+center. A "Both" key shows the 5-hour window on an outer ring and the 7-day window on an
+inner ring. Pressing a key opens the app you pick for it (Claude, a terminal, anything).
 
 Requires a Claude Pro or Max subscription, Claude Code installed and signed in,
 Stream Deck 7.1 or later, and macOS 13 or later.
@@ -10,9 +11,10 @@ Stream Deck 7.1 or later, and macOS 13 or later.
 ## Use it
 
 1. Drag **Usage Gauge** (category "Claude Usage Gauges") onto a key.
-2. In its settings pick **Window** (5-hour or 7-day) and **App to open**. The app can be a
-   name (`Claude`, `Terminal`, `Ghostty`) or a path to a `.app`. Leave it empty to open Claude.
-3. Drop a second one for the other window.
+2. In its settings pick **Window**: 5-hour, 7-day, or Both. Both puts 5h on the outer ring
+   with the big number and 7d on the inner ring with the small grey number.
+3. Under **App to open**, click **Choose App...** and pick the app the key should open.
+   With none chosen, it opens Claude.
 
 The keys show `--` until the first reading arrives (a few seconds).
 

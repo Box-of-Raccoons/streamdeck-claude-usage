@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import { POLL_GAP_EMPTY_SECONDS, POLL_GAP_SECONDS, shouldPoll, TAP_FRESH_SECONDS, UsageService, type PollState } from "../src/service.js";
 import { readTapDir, type TapScan } from "../src/sources.js";
-import { openArgs } from "../src/launch.js";
+import { normalizeApp, openArgs } from "../src/launch.js";
 
 const NOW = 1_000_000;
 
@@ -127,5 +127,29 @@ describe("openArgs", () => {
 		expect(openArgs("/Applications/Claude.app")).toEqual(["-a", "/Applications/Claude.app"]);
 		expect(openArgs("  ")).toEqual(["-a", "Claude"]);
 		expect(openArgs(undefined)).toEqual(["-a", "Claude"]);
+	});
+});
+
+describe("normalizeApp", () => {
+	it("passes a picked path through", () => {
+		expect(normalizeApp("/Applications/Claude.app")).toBe("/Applications/Claude.app");
+	});
+
+	it("drops a trailing slash from a picked bundle", () => {
+		expect(normalizeApp("/Applications/Claude.app/")).toBe("/Applications/Claude.app");
+	});
+
+	it("decodes file URLs and percent-encoded paths", () => {
+		expect(normalizeApp("file:///Applications/Elgato%20Stream%20Deck.app/")).toBe("/Applications/Elgato Stream Deck.app");
+		expect(normalizeApp("/Applications/Elgato%20Stream%20Deck.app")).toBe("/Applications/Elgato Stream Deck.app");
+	});
+
+	it("leaves a real percent sign alone when it isn't an escape", () => {
+		expect(normalizeApp("/Applications/100% Focus.app")).toBe("/Applications/100% Focus.app");
+	});
+
+	it("falls back to Claude when nothing was picked", () => {
+		expect(normalizeApp("")).toBe("Claude");
+		expect(normalizeApp(undefined)).toBe("Claude");
 	});
 });

@@ -10,13 +10,14 @@
 		<sdpi-select setting="window" default="five_hour">
 			<option value="five_hour">5-hour</option>
 			<option value="seven_day">7-day</option>
+			<option value="both">Both (5h outer, 7d inner)</option>
 		</sdpi-select>
 	</sdpi-item>
 	<sdpi-item label="App to open">
-		<sdpi-textfield setting="app" placeholder="Claude"></sdpi-textfield>
+		<sdpi-file setting="app" accept=".app" label="Choose App..."></sdpi-file>
 	</sdpi-item>
 	<sdpi-item>
-		<p style="margin:0;font-size:9pt;opacity:.7">An app name (Claude, Terminal, Ghostty) or a path to a .app. Empty opens Claude.</p>
+		<p style="margin:0;font-size:9pt;opacity:.7">Pressing the key opens this app. None chosen opens Claude.</p>
 	</sdpi-item>
 </body>
 </html>

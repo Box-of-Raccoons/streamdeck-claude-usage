@@ -8,13 +8,15 @@ import streamDeck, {
 	type WillDisappearEvent,
 } from "@elgato/streamdeck";
 
-import { renderGauge, toDataUrl } from "../gauge.js";
+import { renderCombo, renderGauge, toDataUrl } from "../gauge.js";
 import { openApp } from "../launch.js";
 import type { Snapshot, UsageService } from "../service.js";
 import type { WindowKey } from "../usage.js";
 
 type GaugeSettings = {
-	window?: WindowKey;
+	/** Which window to show; "both" draws 5h outer and 7d inner on one key. */
+	window?: WindowKey | "both";
+	/** Path of the app picked in settings (or an app name); empty opens Claude. */
 	app?: string;
 };
 
@@ -71,7 +73,8 @@ export class UsageGauge extends SingletonAction<GaugeSettings> {
 		const v = this.visible.get(id);
 		if (!v) return;
 		const window = v.settings.window ?? "five_hour";
-		const image = toDataUrl(renderGauge(s[window], LABELS[window]));
+		const svg = window === "both" ? renderCombo(s.five_hour, s.seven_day) : renderGauge(s[window], LABELS[window]);
+		const image = toDataUrl(svg);
 		if (image === v.lastImage) return;
 		v.lastImage = image;
 		await v.action.setImage(image);
