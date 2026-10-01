@@ -1,0 +1,42 @@
+{
+	"Name": "Claude Usage Gauges",
+	"Version": "0.1.0.0",
+	"Author": "Box of Raccoons",
+	"Actions": [
+		{
+			"Name": "Usage Gauge",
+			"UUID": "com.boxofraccoons.claude-usage.gauge",
+			"Icon": "imgs/actions/gauge/icon",
+			"Tooltip": "Shows Claude's 5-hour or 7-day usage as a gauge. Press to open an app.",
+			"PropertyInspectorPath": "ui/gauge.html",
+			"Controllers": ["Keypad"],
+			"DisableAutomaticStates": true,
+			"States": [
+				{
+					"Image": "imgs/actions/gauge/key",
+					"ShowTitle": false
+				}
+			]
+		}
+	],
+	"Category": "Claude Usage Gauges",
+	"CategoryIcon": "imgs/plugin/category-icon",
+	"CodePath": "bin/plugin.js",
+	"Description": "Claude 5-hour and 7-day usage as gauge keys. Press a key to open the app of your choice.",
+	"Icon": "imgs/plugin/marketplace",
+	"SDKVersion": 3,
+	"Software": {
+		"MinimumVersion": "7.1"
+	},
+	"OS": [
+		{
+			"Platform": "mac",
+			"MinimumVersion": "13"
+		}
+	],
+	"Nodejs": {
+		"Version": "24",
+		"Debug": "enabled"
+	},
+	"UUID": "com.boxofraccoons.claude-usage"
+}
