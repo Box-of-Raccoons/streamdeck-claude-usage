@@ -87,7 +87,7 @@ export function renderGauge(pct: number | null, label: string): string {
 	const shown = shownValue(pct);
 	const value = percentText(shown);
 	const fontSize = value.length > 3 ? 29 : 35;
-	return frame(ring(shown, RADIUS, STROKE) + text(CX, CY + fontSize * 0.35, fontSize, VALUE, value, true) + text(CX, 132, 20, LABEL, label));
+	return frame(ring(shown, RADIUS, STROKE) + text(CX, CY + fontSize * 0.35, fontSize, VALUE, value, true) + text(CX, 130, 20, LABEL, label));
 }
 
 const COMBO_OUTER = { radius: 60, stroke: 10 };
@@ -106,7 +106,7 @@ export function renderCombo(fiveHour: number | null, sevenDay: number | null): s
 			ring(seven, COMBO_INNER.radius, COMBO_INNER.stroke) +
 			text(CX, 74, big.length > 3 ? 24 : 28, VALUE, big, true) +
 			text(CX, 96, 17, LABEL, percentText(seven)) +
-			text(CX, 138, 16, LABEL, "5h · 7d"),
+			text(CX, 130, 16, LABEL, "5h · 7d"),
 	);
 }
 

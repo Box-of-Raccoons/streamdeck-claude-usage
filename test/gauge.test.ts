@@ -131,6 +131,16 @@ describe("renderCombo", () => {
 	});
 });
 
+// Text set lower than this catches the keycap's glass edge at a glance angle; herdr Control's captions sit here and read cleanly on the device.
+const LOWEST_BASELINE = 130;
+const baselines = (svg: string) => [...svg.matchAll(/<text x="[^"]+" y="([^"]+)"/g)].map((m) => Number(m[1]));
+
+it("keeps every label clear of the key's bottom edge", () => {
+	for (const svg of [renderGauge(42, "5h"), renderGauge(null, "7d"), renderCombo(45, 12), renderCombo(null, null)]) {
+		expect(Math.max(...baselines(svg))).toBeLessThanOrEqual(LOWEST_BASELINE);
+	}
+});
+
 it("arcPath scales with the radius", () => {
 	// r=60 around (72,72): 135° -> (29.57, 114.43); half sweep ends at 12 o'clock (72, 12)
 	expect(arcPath(0.5, 60)).toBe("M 29.57 114.43 A 60 60 0 0 1 72 12");
